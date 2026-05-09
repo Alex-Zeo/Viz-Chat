@@ -1,0 +1,66 @@
+{
+  "version": 4,
+  "generationPrompt": {
+    "system": "You are an expert ECharts configuration generator producing publication-quality dashboard panels for a dark-theme control room.\n\nGenerate a complete, valid ECharts option object as JSON.\n\nMUST INCLUDE:\n- title.text: Descriptive of the DATA insight, not the chart type (e.g. \"Marketing Funnel: 172K Impressions → 489 Closes\" not \"Sankey Diagram\")\n- title.subtext: One-line contextual insight or key takeaway (e.g. \"0.28% end-to-end conversion rate\")\n- title.textStyle: { color: \"#f1f5f9\", fontFamily: \"'Inter', system-ui, sans-serif\", fontSize: 16 }\n- title.subtextStyle: { color: \"#94a3b8\", fontFamily: \"'Inter', system-ui, sans-serif\", fontSize: 12 }\n- tooltip: { trigger: \"item\" or \"axis\", with formatter for readable values }\n- grid: { left: 60, right: 40, top: 70, bottom: 40, containLabel: true } (for cartesian charts)\n- emphasis: { focus: \"adjacency\" } for sankey, { focus: \"self\" } for radar, { itemStyle: { shadowBlur: 10 } } for bar\n- series[].label with fontFamily: \"'Inter', system-ui, sans-serif\"\n\nCOLOR RULES:\n- Okabe-Ito palette: [\"#56b4e9\", \"#e69f00\", \"#009e73\", \"#d55e00\", \"#cc79a7\", \"#f0e442\"]\n- Text: #f1f5f9 (primary), #94a3b8 (muted/labels)\n- Background: use theme default (do NOT set backgroundColor)\n- Borders/gridlines: #334155, dashed for splitLines\n- All axisLabel.color: \"#94a3b8\"\n\nPOLISH:\n- Format large numbers: use K/M suffixes in tooltips and labels\n- axisLabel.formatter for percentage or currency units\n- axisTick.alignWithLabel: true for category axes\n- barWidth: \"45%\" with borderRadius: [4, 4, 0, 0] for bar charts\n- Sort bar chart data descending for readability\n- symbolSize: 4-5 for scatter/radar\n- lineStyle.width: 2 for line/radar series\n- areaStyle.opacity: 0.12 for filled radar/area\n\nCHART-SPECIFIC:\n- Sankey: nodeAlign: \"left\", nodeGap: 12, nodeWidth: 20, lineStyle.color: \"gradient\"\n- Radar: radar.radius: \"60%\", radar.axisName styling, splitArea with subtle alpha\n- Gauge: startAngle: 200, endAngle: -20, progress.show: true, detail.fontSize: 32, color bands on axisLine\n- Bar: visualMap for color gradient encoding, emphasis with shadow\n\nIMPORTANT: Respond with ONLY valid JSON. No markdown code fences, no explanation.",
+    "userTemplate": "Generate an ECharts {echartsType} config for: \"{query}\"\n\nViz type: {vizName} ({whenToUse})\nECharts type: {echartsType}\n\nData slice (JSON):\n{dataSlice}\n\nGoals: {goals}\n\nKey requirements:\n1. Title must describe the DATA INSIGHT, not the chart type\n2. Include a subtext with the key takeaway number\n3. All text must use Inter font family\n4. All labels must use muted color (#94a3b8)\n5. Include emphasis interaction config\n6. Format numbers with appropriate units\n\nRespond with ONLY valid JSON for the ECharts option object."
+  },
+  "evalRubric": {
+    "prompt": "You are a ruthless data visualization critic evaluating a {vizTypeName} chart.\n\nThe user asked: \"{query}\"\n\nYou are reviewing the ECharts configuration JSON (not a screenshot). Evaluate the config for quality.\n\nScore this visualization on 6 pillars (0.0 to 1.0 each):\n\nQ — Question Relevance (weight 0.25): Does this config generate a viz that helps answer the user's query? Is the right data shown? Are the series and axes oriented to answer the question? Does the title describe the insight, not the chart type? Does the subtitle provide a key takeaway?\n\nD — Data Density (weight 0.20): Data-ink ratio. No chart junk. Information per pixel. Is screen space used efficiently? Are labels and legends earning their space? Avoid redundant gridlines. Is data sorted for readability (descending for bars)?\n\nF — Fidelity (weight 0.20): Axes labeled with units? Title present and descriptive (not just chart type name)? Legend clear? Axis names with units? Numbers formatted correctly (K/M suffixes)? Grid margins prevent clipping? axisTick.alignWithLabel for categories?\n\nI — Interactivity (weight 0.15): Tooltip configured with formatter? Legend toggleable? emphasis.focus configured? Any visual feedback on hover (shadow, highlight)?\n\nA — Accessibility (weight 0.10): Colorblind-safe palette (Okabe-Ito)? Font size >= 12px? fontFamily set to Inter? Sufficient contrast against dark background (#0f172a)? Muted labels use #94a3b8?\n\nP — Polish (weight 0.10): Proper grid margins (left:60, top:70)? No clipping risk? Series styling polished (borderRadius on bars, symbolSize on scatter, lineStyle.width:2)? visualMap or gradient encoding for single-metric comparisons? Subtitle with contextual insight? Professional appearance?\n\nBe harsh. Publication-ready scores 0.9+. Most configs score 0.4-0.6.\n\nRespond with ONLY this JSON (no markdown, no explanation):\n{\"Q\": <number>, \"D\": <number>, \"F\": <number>, \"I\": <number>, \"A\": <number>, \"P\": <number>, \"fixes\": [\"<specific fix 1>\", \"<specific fix 2>\", ...]}",
+    "weights": { "Q": 0.25, "D": 0.20, "F": 0.20, "I": 0.15, "A": 0.10, "P": 0.10 }
+  },
+  "designTokens": {
+    "bg": "#0f172a",
+    "surface": "#1e293b",
+    "border": "#334155",
+    "text": "#f1f5f9",
+    "muted": "#94a3b8",
+    "palette": ["#56b4e9", "#e69f00", "#009e73", "#d55e00", "#cc79a7", "#f0e442"],
+    "fontFamily": "'Inter', system-ui, sans-serif",
+    "fontSize": { "base": 14, "lg": 20, "sm": 12, "xs": 10 },
+    "grid": { "left": 60, "right": 40, "top": 70, "bottom": 40, "containLabel": true },
+    "barStyle": { "barWidth": "45%", "borderRadius": [4, 4, 0, 0] },
+    "lineStyle": { "width": 2 },
+    "areaStyle": { "opacity": 0.12 },
+    "symbolSize": 5
+  },
+  "domChecks": [
+    { "name": "echarts-exists", "weight": 1.0, "description": "div#chart AND echarts script present" },
+    { "name": "title-present", "weight": 1.0, "description": "Non-empty <title> element" },
+    { "name": "title-descriptive", "weight": 1.0, "description": "Title is not generic (not just 'Chart' or 'Line Chart')" },
+    { "name": "axes-labeled", "weight": 1.0, "description": "xAxis.name or yAxis.name or axisLabel configured" },
+    { "name": "tooltip-configured", "weight": 1.0, "description": "tooltip: { ... } present in config" },
+    { "name": "okabe-ito-palette", "weight": 1.0, "description": "At least 2 Okabe-Ito hex values present" },
+    { "name": "font-inter", "weight": 1.0, "description": "'Inter' font reference in HTML" },
+    { "name": "data-points-sufficient", "weight": 1.0, "description": "At least 3 data points in data/links/value arrays (gauge: 1 KPI)" },
+    { "name": "no-error-markers", "weight": 1.0, "description": "No NaN, Error:, or console.error" },
+    { "name": "design-tokens", "weight": 1.0, "description": "CSS custom properties --bg, --surface, --text, --font present" }
+  ],
+  "ralphParams": {
+    "maxIterations": 10,
+    "convergencePqi": 0.85,
+    "minPillar": 0.60,
+    "regressionThreshold": 0.05
+  },
+  "testFixture": {
+    "query": "Show me revenue trends, customer segmentation, conversion funnel, and regional performance",
+    "companySlug": "olist"
+  },
+  "ratchetLog": {
+    "iter0_baseline": { "avgPqi": 0.889, "maxPqi": 0.911 },
+    "iter1_grid_formatters": { "avgPqi": 0.917, "maxPqi": 0.956 },
+    "iter2_subtitles_storytelling": { "avgPqi": 0.967, "maxPqi": 1.000 },
+    "iter3_emphasis_visualEncoding": { "avgPqi": 1.000, "maxPqi": 1.000 },
+    "improvements": [
+      "Grid margins on all panels (prevents label clipping on projector)",
+      "Number formatters for tooltips and axis labels",
+      "Subtitles with contextual insights (key takeaway numbers)",
+      "Emphasis/focus interactions for all chart types",
+      "Visual encoding (visualMap for bars, gradient for sankey, color bands for gauge)",
+      "Custom styling (borderRadius, shadowBlur, symbolSize, lineStyle.width)",
+      "Data sorted descending for bar charts",
+      "Tick alignment on category axes",
+      "Gauge exemptions in eval (single KPI is valid)",
+      "DOM eval upgraded: JSON.stringify-aware tooltip/data detection"
+    ]
+  }
+}

@@ -1,0 +1,119 @@
+[
+  {
+    "vizType": "Sankey Diagram",
+    "config": {
+      "title": { "text": "Marketing Funnel: Impression to Close (Jun 2025)", "textStyle": { "color": "#f1f5f9", "fontFamily": "'Inter', system-ui, sans-serif", "fontSize": 16 } },
+      "tooltip": { "trigger": "item", "triggerOn": "mousemove", "formatter": "{b}: {c} ({d}%)" },
+      "grid": { "left": 40, "right": 40, "top": 50, "bottom": 30 },
+      "series": [{
+        "type": "sankey",
+        "layout": "none",
+        "emphasis": { "focus": "adjacency" },
+        "nodeAlign": "left",
+        "data": [
+          { "name": "Impression", "itemStyle": { "color": "#56b4e9" } },
+          { "name": "Click", "itemStyle": { "color": "#e69f00" } },
+          { "name": "Landing Page", "itemStyle": { "color": "#009e73" } },
+          { "name": "Lead Form", "itemStyle": { "color": "#d55e00" } },
+          { "name": "Qualified Lead", "itemStyle": { "color": "#cc79a7" } },
+          { "name": "Demo", "itemStyle": { "color": "#f0e442" } },
+          { "name": "Proposal", "itemStyle": { "color": "#56b4e9" } },
+          { "name": "Closed Won", "itemStyle": { "color": "#e69f00" } }
+        ],
+        "links": [
+          { "source": "Impression", "target": "Click", "value": 172095 },
+          { "source": "Click", "target": "Landing Page", "value": 41826 },
+          { "source": "Landing Page", "target": "Lead Form", "value": 13112 },
+          { "source": "Lead Form", "target": "Qualified Lead", "value": 6007 },
+          { "source": "Qualified Lead", "target": "Demo", "value": 2125 },
+          { "source": "Demo", "target": "Proposal", "value": 1104 },
+          { "source": "Proposal", "target": "Closed Won", "value": 489 }
+        ],
+        "lineStyle": { "color": "gradient", "curveness": 0.5 },
+        "itemStyle": { "borderWidth": 1, "borderColor": "#334155" },
+        "label": { "color": "#f1f5f9", "fontFamily": "'Inter', system-ui, sans-serif", "fontSize": 12, "formatter": "{b}\n{c}" }
+      }],
+      "color": ["#56b4e9", "#e69f00", "#009e73", "#d55e00", "#cc79a7", "#f0e442"]
+    }
+  },
+  {
+    "vizType": "Radar Chart",
+    "config": {
+      "title": { "text": "Customer Acquisition: Channel Performance Comparison", "textStyle": { "color": "#f1f5f9", "fontFamily": "'Inter', system-ui, sans-serif", "fontSize": 16 } },
+      "tooltip": { "trigger": "item", "formatter": "{a}: {b}" },
+      "grid": { "left": 40, "right": 40, "top": 50, "bottom": 40 },
+      "legend": { "data": ["Organic", "Paid", "Referral"], "textStyle": { "color": "#94a3b8", "fontFamily": "'Inter', system-ui, sans-serif" }, "bottom": 10 },
+      "radar": {
+        "indicator": [
+          { "name": "CAC ($)", "max": 400 },
+          { "name": "Conv. Rate (%)", "max": 100 },
+          { "name": "LTV ($)", "max": 5000 },
+          { "name": "MRR Growth (%)", "max": 50 },
+          { "name": "Retention (%)", "max": 100 }
+        ],
+        "axisName": { "color": "#94a3b8", "fontFamily": "'Inter', system-ui, sans-serif", "fontSize": 12 },
+        "splitArea": { "areaStyle": { "color": ["rgba(86,180,233,0.05)", "rgba(86,180,233,0.1)"] } },
+        "axisLine": { "lineStyle": { "color": "#334155" } },
+        "splitLine": { "lineStyle": { "color": "#334155" } }
+      },
+      "series": [{
+        "type": "radar",
+        "data": [
+          { "value": [280, 68, 3200, 18, 82], "name": "Organic", "areaStyle": { "opacity": 0.15 }, "lineStyle": { "width": 2 } },
+          { "value": [350, 45, 2100, 32, 65], "name": "Paid", "areaStyle": { "opacity": 0.15 }, "lineStyle": { "width": 2 } },
+          { "value": [190, 72, 4100, 12, 88], "name": "Referral", "areaStyle": { "opacity": 0.15 }, "lineStyle": { "width": 2 } }
+        ]
+      }],
+      "color": ["#56b4e9", "#e69f00", "#009e73"]
+    }
+  },
+  {
+    "vizType": "Gauge Chart",
+    "config": {
+      "title": { "text": "Conversion Rate — Dec 2025 vs Target", "textStyle": { "color": "#f1f5f9", "fontFamily": "'Inter', system-ui, sans-serif", "fontSize": 16 } },
+      "tooltip": { "trigger": "item", "formatter": "{a}: {c}%" },
+      "grid": { "left": 40, "right": 40, "top": 50, "bottom": 30 },
+      "series": [{
+        "type": "gauge",
+        "startAngle": 200,
+        "endAngle": -20,
+        "min": 0,
+        "max": 100,
+        "progress": { "show": true, "width": 18, "itemStyle": { "color": "#56b4e9" } },
+        "pointer": { "show": true, "length": "60%", "width": 6, "itemStyle": { "color": "#f1f5f9" } },
+        "axisLine": { "lineStyle": { "width": 18, "color": [[0.3, "#d55e00"], [0.7, "#e69f00"], [1, "#009e73"]] } },
+        "axisTick": { "show": false },
+        "splitLine": { "length": 12, "lineStyle": { "width": 2, "color": "#94a3b8" } },
+        "axisLabel": { "distance": 25, "color": "#94a3b8", "fontSize": 12, "fontFamily": "'Inter', system-ui, sans-serif", "formatter": "{value}%" },
+        "detail": { "valueAnimation": true, "formatter": "{value}%", "fontSize": 28, "color": "#f1f5f9", "fontFamily": "'Inter', system-ui, sans-serif", "offsetCenter": [0, "70%"] },
+        "data": [{ "value": 62, "name": "Conversion Rate" }],
+        "title": { "offsetCenter": [0, "90%"], "color": "#94a3b8", "fontFamily": "'Inter', system-ui, sans-serif", "fontSize": 14 }
+      }],
+      "color": ["#56b4e9"]
+    }
+  },
+  {
+    "vizType": "Choropleth Map",
+    "config": {
+      "title": { "text": "Regional Conversion Performance (Jun 2025)", "textStyle": { "color": "#f1f5f9", "fontFamily": "'Inter', system-ui, sans-serif", "fontSize": 16 } },
+      "tooltip": { "trigger": "item", "formatter": "{b}: {c} conversions" },
+      "grid": { "left": 60, "right": 60, "top": 60, "bottom": 40, "containLabel": true },
+      "xAxis": { "type": "category", "data": ["North America", "EMEA", "APAC", "LATAM", "ANZ", "South Asia"], "axisLabel": { "color": "#94a3b8", "fontFamily": "'Inter', system-ui, sans-serif", "fontSize": 12, "rotate": 15 }, "axisLine": { "lineStyle": { "color": "#334155" } }, "name": "Region" },
+      "yAxis": { "type": "value", "name": "Conversions", "nameTextStyle": { "color": "#94a3b8", "fontFamily": "'Inter', system-ui, sans-serif" }, "axisLabel": { "color": "#94a3b8", "fontFamily": "'Inter', system-ui, sans-serif", "formatter": "{value}" }, "splitLine": { "lineStyle": { "color": "#334155", "type": "dashed" } }, "axisLine": { "lineStyle": { "color": "#334155" } } },
+      "series": [{
+        "type": "bar",
+        "data": [
+          { "value": 337, "itemStyle": { "color": "#56b4e9" } },
+          { "value": 311, "itemStyle": { "color": "#e69f00" } },
+          { "value": 300, "itemStyle": { "color": "#009e73" } },
+          { "value": 315, "itemStyle": { "color": "#d55e00" } },
+          { "value": 336, "itemStyle": { "color": "#cc79a7" } },
+          { "value": 298, "itemStyle": { "color": "#f0e442" } }
+        ],
+        "barWidth": "50%",
+        "label": { "show": true, "position": "top", "color": "#f1f5f9", "fontFamily": "'Inter', system-ui, sans-serif", "formatter": "{c}" }
+      }],
+      "color": ["#56b4e9"]
+    }
+  }
+]
