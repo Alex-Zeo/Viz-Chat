@@ -1,0 +1,1166 @@
+/* ── Design Tokens ──────────────────────────────────────────────── */
+:root {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --border: #334155;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --blue: #56b4e9;
+  --green: #009e73;
+  --yellow: #f0e442;
+  --red: #cc3333;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --accent-glow: rgba(86, 180, 233, 0.15);
+  --accent-glow-strong: rgba(86, 180, 233, 0.35);
+}
+
+/* ── Theme: Deep Space ─────────────────────────────────────────── */
+[data-theme="deep-space"] {
+  --bg: #070b18;
+  --surface: rgba(15, 22, 45, 0.75);
+  --border: rgba(0, 212, 255, 0.12);
+  --text: #e8edf5;
+  --muted: #5a6580;
+  --blue: #00d4ff;
+  --green: #00dfa2;
+  --yellow: #ffd43b;
+  --red: #ff4f6d;
+  --accent-glow: rgba(0, 212, 255, 0.15);
+  --accent-glow-strong: rgba(0, 212, 255, 0.35);
+}
+
+/* ── Theme: Obsidian ───────────────────────────────────────────── */
+[data-theme="obsidian"] {
+  --bg: #1a1714;
+  --surface: #242018;
+  --border: rgba(232, 179, 65, 0.15);
+  --text: #fafaf9;
+  --muted: #a8a29e;
+  --blue: #e8b341;
+  --green: #4ade80;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --accent-glow: rgba(232, 179, 65, 0.15);
+  --accent-glow-strong: rgba(232, 179, 65, 0.35);
+}
+
+/* ── Theme: Phosphor ───────────────────────────────────────────── */
+[data-theme="phosphor"] {
+  --bg: #0a120a;
+  --surface: #0f1a0f;
+  --border: rgba(0, 255, 135, 0.12);
+  --text: #d0ffd0;
+  --muted: #4a7a4a;
+  --blue: #00ff87;
+  --green: #22c55e;
+  --yellow: #facc15;
+  --red: #ef4444;
+  --accent-glow: rgba(0, 255, 135, 0.15);
+  --accent-glow-strong: rgba(0, 255, 135, 0.35);
+}
+
+/* ── Reset ──────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+}
+
+/* ── App Layout ─────────────────────────────────────────────────── */
+.app-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 320px;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    "compositor compositor compositor compositor sidebar"
+    "statusbar  statusbar  statusbar  statusbar  statusbar";
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  gap: 0;
+}
+
+.compositor-area {
+  grid-area: compositor;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 12px;
+  gap: 10px;
+}
+
+.sidebar-area {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.status-bar-area {
+  grid-area: statusbar;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Compositor Header ──────────────────────────────────────────── */
+.compositor-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.query-display {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.stage-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: all 0.3s ease;
+}
+
+.stage-badge[data-stage="idle"] { color: var(--muted); }
+.stage-badge[data-stage="parsing"],
+.stage-badge[data-stage="probing"],
+.stage-badge[data-stage="ranking"],
+.stage-badge[data-stage="assigning"] {
+  color: var(--yellow);
+  border-color: var(--yellow);
+}
+.stage-badge[data-stage="building"],
+.stage-badge[data-stage="composing"],
+.stage-badge[data-stage="answering"] {
+  color: var(--blue);
+  border-color: var(--blue);
+}
+.stage-badge[data-stage="done"] {
+  color: var(--bg);
+  background: var(--green);
+  border-color: var(--green);
+  font-weight: 700;
+}
+
+.runtime-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--green);
+  background: rgba(0, 255, 135, 0.08);
+  border: 1px solid rgba(0, 255, 135, 0.2);
+}
+.runtime-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Compositor Grid ────────────────────────────────────────────── */
+.compositor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Panel Frame ────────────────────────────────────────────────── */
+.panel-frame {
+  position: relative;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel-frame.panel-empty {
+  border-color: var(--border);
+}
+
+.panel-frame.panel-building {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 1px var(--blue), 0 0 16px var(--accent-glow);
+  animation: border-pulse 2s ease-in-out infinite;
+}
+
+.panel-frame.panel-complete {
+  border-color: var(--green);
+  box-shadow: 0 0 0 1px var(--green);
+}
+
+@keyframes border-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px var(--blue), 0 0 16px var(--accent-glow); }
+  50%       { box-shadow: 0 0 0 1px var(--blue), 0 0 28px var(--accent-glow-strong); }
+}
+
+.panel-empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.panel-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* Shimmer skeleton */
+.shimmer {
+  width: 80%;
+  height: 120px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--border) 0%,
+    #475569 50%,
+    var(--border) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.panel-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  flex: 1;
+  min-height: 0;
+  background: #0d1117;
+}
+
+/* Chart area fills remaining space above control bar */
+.panel-chart-area {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Panel Control Bar (bottom) ───────────────────────────────── */
+.panel-control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  gap: 8px;
+  min-height: 30px;
+}
+
+/* Iteration tabs row */
+.panel-iter-tabs {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.iter-tab {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  font-size: 10px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  width: 22px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.iter-tab:hover {
+  border-color: var(--blue);
+  color: var(--text);
+}
+
+.iter-tab.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+.iter-tab.best:not(.active)::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  width: 4px;
+  height: 2px;
+  background: var(--green);
+  border-radius: 1px;
+}
+
+.iter-tab.best {
+  position: relative;
+}
+
+/* Code/chart toggle button */
+.code-toggle {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  font-size: 10px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  padding: 2px 6px;
+  height: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.code-toggle:hover {
+  border-color: var(--blue);
+  color: var(--text);
+}
+
+.code-toggle.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+/* Trace view inside panel */
+.panel-trace-view {
+  height: 100%;
+  overflow: auto;
+  padding: 6px 8px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.trace-iter {
+  padding: 4px 6px;
+  margin-bottom: 4px;
+  border-left: 2px solid var(--border);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.trace-iter.trace-best {
+  border-left-color: var(--green);
+  background: rgba(0, 223, 162, 0.05);
+}
+
+.trace-iter-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.trace-pqi { color: var(--blue); }
+
+.trace-pillars {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.trace-pillar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trace-pillar-label {
+  width: 10px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.trace-pillar-bar {
+  height: 3px;
+  background: var(--blue);
+  border-radius: 2px;
+  max-width: 60px;
+  transition: width 0.2s ease;
+}
+
+.trace-pillar-val {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.trace-fixes {
+  margin: 3px 0 0;
+  padding-left: 14px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.trace-fixes li { margin-bottom: 1px; }
+
+/* Code view inside panel */
+.panel-code-view {
+  height: 100%;
+  margin: 0;
+  padding: 8px 10px;
+  overflow: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* Panel status (right side of control bar) */
+.panel-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.panel-status.building { color: var(--blue); }
+.panel-status.complete { color: var(--green); }
+.panel-status.failed   { color: var(--red); }
+
+.type-mismatch-badge {
+  background: var(--red);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  animation: pulse-badge 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.status-label-text {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-pqi {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-weight: 600;
+}
+
+.status-x {
+  color: var(--red);
+}
+
+.iteration-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: blink 1s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.checkmark {
+  color: var(--green);
+  font-size: 13px;
+}
+
+/* ── Status Bar ─────────────────────────────────────────────────── */
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 16px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-value {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.status-label {
+  color: var(--muted);
+}
+
+.status-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+}
+
+/* ── Company Selector ───────────────────────────────────────────── */
+.company-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.company-selector label {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.company-select {
+  appearance: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 6px 28px 6px 10px;
+  cursor: pointer;
+  min-width: 200px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+.company-select:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.company-select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* ── Global: kill CopilotKit web inspector & toast portals ──────── */
+/* CopilotKit injects <cpk-web-inspector> (a Web Component with
+   shadow DOM) that renders a floating debug button + "v1.50 is now
+   live!" announcement at z-index 4500. It covers interactive
+   elements and violates viewport containment. Hide the host. */
+cpk-web-inspector {
+  display: none !important;
+}
+
+/* ── CopilotKit sidebar: dynamic containment ───────────────────── */
+/*
+ * RULE: every element inside sidebar-area MUST be contained.
+ * Nothing escapes the viewport. All sizing is relative (flex/%).
+ * No fixed pixel heights on containers. overflow:hidden on every
+ * wrapper as a safety net. Messages area scrolls; everything else
+ * is flex: 0 0 auto (natural size) or flex: 1 (fill remaining).
+ */
+
+/* Kill the "CopilotKit v1.50 is now live" notification banner */
+.sidebar-area .copilotKitSidebar > div:not(.copilotKitWindow) {
+  display: none !important;
+}
+
+/* Wrapper chain: static, fill parent, clip overflow */
+.sidebar-area .copilotKitSidebarContentWrapper,
+.sidebar-area .copilotKitSidebar,
+.sidebar-area .copilotKitWindow {
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* Header: fixed size, never shrinks or grows */
+.sidebar-area .copilotKitHeader {
+  width: 100% !important;
+  flex: 0 0 auto !important;
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* Chat body: fills remaining space between header and input */
+.sidebar-area .copilotKitChatBody {
+  width: 100% !important;
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+/* Messages: scrollable, takes all space above input */
+.sidebar-area .copilotKitMessages {
+  width: 100% !important;
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Input container: fixed size at bottom, never clips */
+.sidebar-area .copilotKitInputContainer {
+  width: 100% !important;
+  flex: 0 0 auto !important;
+  padding: 8px 12px !important;
+  border-top: 1px solid var(--border) !important;
+}
+
+/* Hide "Powered by CopilotKit" — reclaims ~24px */
+.sidebar-area .copilotKitInputContainer > *:not(.copilotKitInput) {
+  display: none !important;
+}
+
+.sidebar-area .copilotKitInput {
+  width: 100% !important;
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+
+.sidebar-area .copilotKitInput textarea {
+  min-height: 40px !important;
+  font-size: 14px !important;
+  padding: 8px 12px !important;
+  border: none !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  font-family: var(--font) !important;
+  resize: none !important;
+}
+
+.sidebar-area .copilotKitInput textarea::placeholder {
+  color: var(--muted) !important;
+}
+
+/* Dark theme for all CopilotKit elements */
+.sidebar-area .copilotKitWindow,
+.sidebar-area .copilotKitMessages,
+.sidebar-area .copilotKitChatBody {
+  background: var(--bg) !important;
+}
+
+.sidebar-area .copilotKitInputContainer {
+  background: var(--surface) !important;
+}
+
+.sidebar-area .copilotKitHeader *,
+.sidebar-area .copilotKitMessages *,
+.sidebar-area .copilotKitInputContainer *,
+.sidebar-area .copilotKitWindow * {
+  color: var(--text) !important;
+}
+
+.sidebar-area .copilotKitHeader button,
+.sidebar-area .copilotKitMessages button,
+.sidebar-area .copilotKitInputContainer button {
+  color: var(--muted) !important;
+  border-color: var(--border) !important;
+}
+
+.sidebar-area .copilotKitHeader button:hover,
+.sidebar-area .copilotKitMessages button:hover {
+  color: var(--text) !important;
+}
+
+/* ── Sidebar layout: history above chat ──────────────────────────── */
+/*
+ * RunHistory sits at the top of .sidebar-area (flex column).
+ * It takes up to 40% of the sidebar but shrinks if content is small.
+ * The copilot-wrap div beneath it takes the remaining space and
+ * passes 100% height down to CopilotKit.
+ */
+.run-history {
+  flex: 0 1 auto;
+  max-height: 40%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.run-history__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 6px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.run-history__title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.run-history__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 100px;
+  background: var(--border);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.run-history__list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling for run history */
+.run-history__list::-webkit-scrollbar {
+  width: 4px;
+}
+.run-history__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.run-history__list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* ── CollapsibleRun ──────────────────────────────────────────────── */
+.collapsible-run {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  user-select: none;
+}
+
+.collapsible-run:hover:not(.collapsible-run--active) {
+  background: var(--accent-glow);
+}
+
+.collapsible-run--active {
+  cursor: default;
+  background: var(--accent-glow);
+  border-left: 2px solid var(--blue);
+}
+
+.collapsible-run__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  min-width: 0;
+}
+
+.collapsible-run__chevron {
+  font-size: 10px;
+  color: var(--muted);
+  flex-shrink: 0;
+  width: 12px;
+  text-align: center;
+}
+
+.collapsible-run--active .collapsible-run__chevron {
+  color: var(--blue);
+}
+
+.collapsible-run__query {
+  flex: 1;
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.collapsible-run__badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--border);
+  padding: 2px 6px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.collapsible-run__time {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  white-space: nowrap;
+}
+
+.collapsible-run__body {
+  padding: 4px 10px 10px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.collapsible-run__company {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.collapsible-run__label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.collapsible-run__value {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.collapsible-run__agents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.collapsible-run__agent-chip {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.collapsible-run__agent-chip--converged {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.collapsible-run__agent-chip--failed {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.collapsible-run__agent-chip--building,
+.collapsible-run__agent-chip--evaluating,
+.collapsible-run__agent-chip--fixing {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+/* Highlight flash for scroll-to-chat */
+@keyframes highlight-flash {
+  0% { outline: 2px solid var(--blue); outline-offset: 2px; }
+  100% { outline: 2px solid transparent; outline-offset: 2px; }
+}
+.highlight-flash {
+  animation: highlight-flash 1.5s ease-out;
+}
+
+/* ── Copilot wrapper (fills remaining sidebar height) ────────────── */
+.copilot-wrap {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.synthesis-message {
+  padding: 12px 16px;
+  margin: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+.synthesis-message .synthesis-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blue);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.synthesis-message p {
+  margin: 0;
+  color: var(--text);
+  opacity: 0.9;
+}
+
+/* ── Deep Space: glassmorphism ─────────────────────────────────── */
+[data-theme="deep-space"] #root {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 100, 255, 0.06) 0%, transparent 60%),
+    var(--bg);
+}
+
+[data-theme="deep-space"] .panel-frame {
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+}
+
+[data-theme="deep-space"] .sidebar-area {
+  backdrop-filter: blur(40px) saturate(1.2);
+  -webkit-backdrop-filter: blur(40px) saturate(1.2);
+  background: rgba(15, 20, 35, 0.5);
+}
+
+[data-theme="deep-space"] .sidebar-area .copilotKitWindow,
+[data-theme="deep-space"] .sidebar-area .copilotKitMessages,
+[data-theme="deep-space"] .sidebar-area .copilotKitChatBody {
+  background: rgba(6, 8, 15, 0.8) !important;
+}
+
+[data-theme="deep-space"] .sidebar-area .copilotKitInputContainer {
+  background: rgba(15, 20, 35, 0.8) !important;
+}
+
+[data-theme="deep-space"] .run-history__header {
+  background: rgba(15, 20, 35, 0.6);
+}
+
+[data-theme="deep-space"] .status-bar {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(15, 20, 35, 0.6);
+}
+
+/* ── Obsidian: warm, premium, gold-accented ───────────────────── */
+[data-theme="obsidian"] #root {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(232, 179, 65, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(180, 120, 40, 0.05) 0%, transparent 50%),
+    var(--bg);
+}
+
+[data-theme="obsidian"] .compositor-header {
+  border-bottom-color: rgba(232, 179, 65, 0.2);
+}
+
+[data-theme="obsidian"] .panel-frame {
+  border-width: 1px;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="obsidian"] .panel-frame.panel-complete {
+  border-color: var(--green);
+  border-width: 1px;
+}
+
+[data-theme="obsidian"] .panel-frame.panel-building {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 1px var(--blue), 0 0 24px rgba(232, 179, 65, 0.12);
+}
+
+[data-theme="obsidian"] .sidebar-area {
+  background: #1e1b16;
+  border-left-color: rgba(232, 179, 65, 0.2);
+}
+
+[data-theme="obsidian"] .run-history__header {
+  border-bottom: 1px solid rgba(232, 179, 65, 0.1);
+}
+
+[data-theme="obsidian"] .status-bar {
+  background: #1e1b16;
+  border-top-color: rgba(232, 179, 65, 0.2);
+}
+
+[data-theme="obsidian"] .stage-badge[data-stage="done"] {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #09090b;
+}
+
+[data-theme="obsidian"] .panel-control-bar {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Phosphor: terminal CRT, electric green ───────────────────── */
+[data-theme="phosphor"] #root {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 255, 135, 0.03) 2px,
+      rgba(0, 255, 135, 0.03) 4px
+    ),
+    radial-gradient(ellipse at 50% 50%, rgba(0, 255, 135, 0.07) 0%, transparent 70%),
+    var(--bg);
+}
+
+[data-theme="phosphor"] .compositor-header {
+  border-bottom-color: rgba(0, 255, 135, 0.15);
+}
+
+[data-theme="phosphor"] .panel-frame {
+  border-color: rgba(0, 255, 135, 0.12);
+}
+
+[data-theme="phosphor"] .panel-frame.panel-building {
+  box-shadow: 0 0 0 1px var(--blue), 0 0 20px rgba(0, 255, 135, 0.2), 0 0 60px rgba(0, 255, 135, 0.06);
+}
+
+[data-theme="phosphor"] .panel-frame.panel-complete {
+  border-color: var(--green);
+  box-shadow: 0 0 0 1px var(--green), 0 0 12px rgba(34, 197, 94, 0.15);
+}
+
+[data-theme="phosphor"] .sidebar-area {
+  background: #0d160d;
+  border-left-color: rgba(0, 255, 135, 0.18);
+}
+
+[data-theme="phosphor"] .status-bar {
+  background: #0d160d;
+  border-top-color: rgba(0, 255, 135, 0.18);
+}
+
+[data-theme="phosphor"] .stage-badge[data-stage="done"] {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #0a0a0a;
+  text-shadow: 0 0 8px rgba(0, 255, 135, 0.4);
+}
+
+[data-theme="phosphor"] .panel-title {
+  text-shadow: 0 0 12px rgba(0, 255, 135, 0.2);
+}
+
+[data-theme="phosphor"] .query-display {
+  border-color: rgba(0, 255, 135, 0.15);
+}
+
+/* ── Theme Toggle ──────────────────────────────────────────────── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.theme-dot {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--dot-color);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  opacity: 0.5;
+}
+
+.theme-dot:hover {
+  opacity: 1;
+  border-color: var(--dot-color);
+  transform: scale(1.2);
+}
+
+.theme-dot.active {
+  opacity: 1;
+  border-color: var(--dot-color);
+  box-shadow: 0 0 8px var(--dot-color);
+}
